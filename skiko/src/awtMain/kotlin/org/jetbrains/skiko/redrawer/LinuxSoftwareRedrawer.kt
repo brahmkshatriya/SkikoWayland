@@ -14,6 +14,7 @@ internal class LinuxSoftwareRedrawer(
         val w = (layer.width * scale).toInt().coerceAtLeast(0)
         val h = (layer.height * scale).toInt().coerceAtLeast(0)
         layer.backedLayer.lockLinuxDrawingSurface {
+            it as X11DrawingSurface
             device = createDevice(it.display, it.window, w, h).also {
                 if (it == 0L) {
                     throw RenderException("Failed to create Software device")

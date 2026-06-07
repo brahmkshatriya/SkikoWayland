@@ -245,6 +245,9 @@ fun SkikoProjectContext.configureNativeTarget(os: OS, arch: Arch, target: Kotlin
             val options = mutableListOf(
                 "-L/usr/lib64",
                 "-L/usr/lib/${if (arch == Arch.Arm64) "aarch64" else "x86_64"}-linux-gnu",
+                "-lEGL",
+                "-lwayland-client",
+                "-lwayland-egl",
             )
             options.addAll(resolvedBinaryInputs.directStaticArchivePaths)
             options.addAll(resolvedBinaryInputs.dynamicLibNames.map { "-l$it" })

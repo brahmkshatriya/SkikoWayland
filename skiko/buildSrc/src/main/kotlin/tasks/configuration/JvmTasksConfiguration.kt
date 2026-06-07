@@ -272,6 +272,9 @@ fun SkikoProjectContext.createLinkJvmBindings(
                         // `libstdc++.so.6.*` binaries are forward-compatible and used from GCC 3.4 to 16+,
                         // so do not use `-static-libstdc++` to avoid issues with complex setup.
                         "-static-libgcc",
+                        "-lEGL",
+                        "-lwayland-client",
+                        "-lwayland-egl",
                         // Enforce immediate symbol resolution at library load time to prevent
                         // lazy-binding issues and make GOT read-only afterwards.
                         "-Wl,-z,relro,-z,now",

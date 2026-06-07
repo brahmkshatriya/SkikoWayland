@@ -21,8 +21,16 @@ internal actual fun makeDefaultRenderFactory(): RenderFactory =
             }
             OS.Linux -> when (renderApi) {
                 GraphicsApi.SOFTWARE_COMPAT -> SoftwareRedrawer(layer, analytics, properties)
-                GraphicsApi.SOFTWARE_FAST -> LinuxSoftwareRedrawer(layer, analytics, properties)
-                else -> LinuxOpenGLRedrawer(layer, analytics, properties)
+                GraphicsApi.SOFTWARE_FAST -> if (isWaylandToolkit()) {
+                    SoftwareRedrawer(layer, analytics, properties)
+                } else {
+                    LinuxSoftwareRedrawer(layer, analytics, properties)
+                }
+                else -> if (isWaylandToolkit()) {
+                    LinuxWaylandEGLRedrawer(layer, analytics, properties)
+                } else {
+                    LinuxOpenGLRedrawer(layer, analytics, properties)
+                }
             }
             else -> throw UnsupportedOperationException("AWT doesn't support $hostOs")
         }

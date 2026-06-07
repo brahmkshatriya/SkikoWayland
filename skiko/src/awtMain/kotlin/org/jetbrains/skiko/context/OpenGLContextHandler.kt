@@ -3,9 +3,9 @@ package org.jetbrains.skiko.context
 import org.jetbrains.skia.*
 import org.jetbrains.skiko.*
 
-internal class OpenGLContextHandler(layer: SkiaLayer) : ContextBasedContextHandler(layer, "OpenGL") {
+internal open class OpenGLContextHandler(layer: SkiaLayer) : ContextBasedContextHandler(layer, "OpenGL") {
 
-    override fun makeContext() = makeGLContext()
+    override open fun makeContext() = makeGLContext()
 
     private var currentWidth = 0
     private var currentHeight = 0
@@ -25,6 +25,7 @@ internal class OpenGLContextHandler(layer: SkiaLayer) : ContextBasedContextHandl
         if (isSizeChanged(w, h) || surface == null) {
             disposeCanvas()
             val gl = OpenGLApi.instance
+            gl.glViewport(0, 0, w, h)
             val fbId = gl.glGetIntegerv(gl.GL_DRAW_FRAMEBUFFER_BINDING)
             renderTarget = makeGLRenderTarget(
                 w,

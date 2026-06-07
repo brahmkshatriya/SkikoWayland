@@ -15,6 +15,7 @@ internal class OpenGLApi private constructor() {
     // OpenGL functions
     external fun glFinish()
     external fun glFlush()
+    external fun glViewport(x: Int, y: Int, width: Int, height: Int)
     external fun glGetIntegerv(pname: Int): Int
     external fun glGetString(value: Int): String?
 

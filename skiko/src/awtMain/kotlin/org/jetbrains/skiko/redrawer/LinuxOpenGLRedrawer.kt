@@ -21,6 +21,7 @@ internal class LinuxOpenGLRedrawer(
 
     init {
     	layer.backedLayer.lockLinuxDrawingSurface {
+            it as X11DrawingSurface
             context = it.createContext(layer.transparency)
             if (context == 0L) {
                 throw RenderException("Cannot create Linux GL context")
@@ -63,6 +64,7 @@ internal class LinuxOpenGLRedrawer(
         checkDisposed()
         frameJob.cancel()
         layer.backedLayer.lockLinuxDrawingSurface {
+            it as X11DrawingSurface
             // makeCurrent is mandatory to destroy context, otherwise, OpenGL will destroy wrong context (from another window).
             // see the official example: https://www.khronos.org/opengl/wiki/Tutorial:_OpenGL_3.0_Context_Creation_(GLX)
             it.makeCurrent(context)
@@ -79,6 +81,7 @@ internal class LinuxOpenGLRedrawer(
     }
 
     override fun renderImmediately() = layer.backedLayer.lockLinuxDrawingSurface {
+        it as X11DrawingSurface
         checkDisposed()
         update()
         inDrawScope {
@@ -124,7 +127,9 @@ internal class LinuxOpenGLRedrawer(
                 }
             }
 
-            val drawingSurfaces = toRedrawVisible.associateWith { lockLinuxDrawingSurface(it.layer.backedLayer) }
+            val drawingSurfaces = toRedrawVisible.associateWith {
+                lockLinuxDrawingSurface(it.layer.backedLayer) as X11DrawingSurface
+            }
             try {
                 for (redrawer in toRedrawVisible) {
                     drawingSurfaces[redrawer]!!.makeCurrent(redrawer.context)
@@ -165,11 +170,11 @@ internal class LinuxOpenGLRedrawer(
     }
 }
 
-private fun LinuxDrawingSurface.createContext(transparency: Boolean) = createContext(display, transparency)
-private fun LinuxDrawingSurface.destroyContext(context: Long) = destroyContext(display, context)
-private fun LinuxDrawingSurface.makeCurrent(context: Long) = makeCurrent(display, window, context)
-private fun LinuxDrawingSurface.swapBuffers() = swapBuffers(display, window)
-private fun LinuxDrawingSurface.setSwapInterval(interval: Int) = setSwapInterval(display, window, interval)
+private fun X11DrawingSurface.createContext(transparency: Boolean) = createContext(display, transparency)
+private fun X11DrawingSurface.destroyContext(context: Long) = destroyContext(display, context)
+private fun X11DrawingSurface.makeCurrent(context: Long) = makeCurrent(display, window, context)
+private fun X11DrawingSurface.swapBuffers() = swapBuffers(display, window)
+private fun X11DrawingSurface.setSwapInterval(interval: Int) = setSwapInterval(display, window, interval)
 
 private external fun makeCurrent(display: Long, window: Long, context: Long)
 private external fun createContext(display: Long, transparency: Boolean): Long
