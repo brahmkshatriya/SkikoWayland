@@ -482,10 +482,15 @@ afterEvaluate {
 skikoProjectContext.declarePublications()
 
 val mavenCentral = MavenCentralProperties(project)
-if (skiko.isTeamcityCIBuild || mavenCentral.signArtifacts) {
+val hasGradleSigningProperties = providers.gradleProperty("signing.secretKeyRingFile").isPresent ||
+    providers.gradleProperty("signingKey").isPresent ||
+    providers.gradleProperty("signing.keyId").isPresent
+if (skiko.isTeamcityCIBuild || mavenCentral.signArtifacts || hasGradleSigningProperties) {
     signing {
         sign(publishing.publications)
-        useInMemoryPgpKeys(mavenCentral.signArtifactsKey.get(), mavenCentral.signArtifactsPassword.get())
+        if (mavenCentral.signArtifacts) {
+            useInMemoryPgpKeys(mavenCentral.signArtifactsKey.get(), mavenCentral.signArtifactsPassword.get())
+        }
     }
     configureSignAndPublishDependencies()
 }

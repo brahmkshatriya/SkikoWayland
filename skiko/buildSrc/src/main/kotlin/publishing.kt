@@ -90,6 +90,18 @@ private fun SkikoPublishingContext.configurePublishingRepositories() {
                     password = skiko.composeRepoKey
                 }
             }
+            maven {
+                name = "Sonatype"
+                url = project.uri(
+                    project.providers.gradleProperty("sonatypeRepositoryUrl")
+                        .orElse("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
+                        .get()
+                )
+                credentials {
+                    username = project.providers.gradleProperty("mavenCentralUsername").orNull
+                    password = project.providers.gradleProperty("mavenCentralPassword").orNull
+                }
+            }
         }
     }
 }
@@ -116,7 +128,7 @@ private fun SkikoPublishingContext.configurePublicationDefaults() {
                         url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
                     }
                 }
-                val repoUrl = "https://www.github.com/JetBrains/skiko"
+                val repoUrl = "https://github.com/brahmkshatriya/SkikoWayland"
                 url.set(repoUrl)
                 scm {
                     url.set(repoUrl)
@@ -126,9 +138,10 @@ private fun SkikoPublishingContext.configurePublicationDefaults() {
                 }
                 developers {
                     developer {
-                        name.set("Compose Multiplatform Team")
-                        organization.set("JetBrains")
-                        organizationUrl.set("https://www.jetbrains.com")
+                        id.set("brahmkshatriya")
+                        name.set("Brahmkshatriya")
+                        organization.set("Brahmkshatriya")
+                        organizationUrl.set("https://github.com/brahmkshatriya")
                     }
                 }
             }

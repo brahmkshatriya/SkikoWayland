@@ -68,6 +68,22 @@ Build the AWT Kotlin and Linux x64 native bindings:
   --no-daemon
 ```
 
+## Published Coordinates
+
+This fork is published under:
+
+```text
+dev.brahmkshatriya.skiko
+```
+
+Linux x64 Compose Desktop apps need these artifacts:
+
+```kotlin
+implementation("dev.brahmkshatriya.skiko:skiko:0.148.1")
+implementation("dev.brahmkshatriya.skiko:skiko-awt:0.148.1")
+implementation("dev.brahmkshatriya.skiko:skiko-awt-runtime-linux-x64:0.148.1")
+```
+
 ## Publish To Maven Local
 
 For local Compose Desktop testing, publish this fork with the same version
@@ -76,14 +92,15 @@ Compose is already requesting:
 ```bash
 ./gradlew :skiko:publishToMavenLocal \
   -Pdeploy.version=0.148.1 \
+  -Pdeploy.release=true \
   --no-daemon
 ```
 
-This publishes `0.148.1-SNAPSHOT` artifacts to Maven local, including:
+This publishes `0.148.1` artifacts to Maven local, including:
 
-- `org.jetbrains.skiko:skiko`
-- `org.jetbrains.skiko:skiko-awt`
-- `org.jetbrains.skiko:skiko-awt-runtime-linux-x64`
+- `dev.brahmkshatriya.skiko:skiko`
+- `dev.brahmkshatriya.skiko:skiko-awt`
+- `dev.brahmkshatriya.skiko:skiko-awt-runtime-linux-x64`
 
 ## Use In Compose Desktop
 
@@ -104,11 +121,11 @@ subprojects {
     configurations.configureEach {
         resolutionStrategy.dependencySubstitution {
             substitute(module("org.jetbrains.skiko:skiko"))
-                .using(module("org.jetbrains.skiko:skiko:0.148.1-SNAPSHOT"))
+                .using(module("dev.brahmkshatriya.skiko:skiko:0.148.1"))
             substitute(module("org.jetbrains.skiko:skiko-awt"))
-                .using(module("org.jetbrains.skiko:skiko-awt:0.148.1-SNAPSHOT"))
+                .using(module("dev.brahmkshatriya.skiko:skiko-awt:0.148.1"))
             substitute(module("org.jetbrains.skiko:skiko-awt-runtime-linux-x64"))
-                .using(module("org.jetbrains.skiko:skiko-awt-runtime-linux-x64:0.148.1-SNAPSHOT"))
+                .using(module("dev.brahmkshatriya.skiko:skiko-awt-runtime-linux-x64:0.148.1"))
         }
     }
 }

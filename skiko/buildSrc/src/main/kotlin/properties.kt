@@ -301,6 +301,6 @@ class SkikoArtifacts(
 
     companion object {
         const val DEFAULT_ARTIFACT_ID_PREFIX = "skiko"
-        const val DEFAULT_GROUP_ID = "org.jetbrains.skiko"
+        const val DEFAULT_GROUP_ID = "dev.brahmkshatriya.skiko"
     }
 }
